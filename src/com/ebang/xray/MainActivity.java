@@ -1,11 +1,21 @@
 package com.ebang.xray;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends Activity {
     /**
@@ -14,6 +24,11 @@ public class MainActivity extends Activity {
 
 
     private ArrayAdapter<Allergy> allergyAdapter;
+
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+
+    private Uri fileUri;
+    public static final int MEDIA_TYPE_IMAGE = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,22 +45,76 @@ public class MainActivity extends Activity {
 
         Button pictureButton = (Button) findViewById(R.id.takePicture);
 
+
         pictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+                Log.d("XRAY", fileUri.toString());
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+
+                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
             }
+
         });
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+
+
+
+            } else {
+                Toast.makeText(this, "Failed to saved image, try again", Toast.LENGTH_LONG).show();
+            }
+        }
+
+    }
+
+
     private void populateAllergies(){
         String[] names = new String[] {"Milk", "Eggs", "Peanuts", "Tree Nuts", "Fish", "Shellfish", "Soy", "Wheat"};
         for(String n: names){
-            Allergy al = new Allergy(n);
-            Allergy.all.add(al);
+            new Allergy(n);
         }
         allergyAdapter.notifyDataSetChanged();
     }
 
+
+
+    private static Uri getOutputMediaFileUri(int type){
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
+
+    private static File getOutputMediaFile(int type){
+
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "MyCameraApp");
+
+        if (! mediaStorageDir.exists()){
+            if (! mediaStorageDir.mkdirs()){
+                Log.d("MyCameraApp", "failed to create directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE){
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                    "IMG_"+ timeStamp + ".jpg");
+        } else {
+            return null;
+        }
+
+        return mediaFile;
+    }
 }

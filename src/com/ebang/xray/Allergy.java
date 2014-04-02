@@ -15,6 +15,7 @@ public class Allergy {
     public Allergy(String name){
         this.name = name;
         this.selected = false;
+        all.add(this);
     }
 
     public static Allergy find(String name){
