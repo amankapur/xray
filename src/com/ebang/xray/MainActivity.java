@@ -5,17 +5,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+
 
 public class MainActivity extends Activity {
     /**
@@ -50,13 +50,17 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//
+//                fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+//                Log.d("XRAY", fileUri.toString());
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+//
+//                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 
-                fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-                Log.d("XRAY", fileUri.toString());
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-
-                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+                intent.putExtra("SCAN_MODE", "ONE_D_MODE" );
+                startActivityForResult(intent, 0);
             }
 
         });
@@ -64,15 +68,29 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+//        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+//            if (resultCode == RESULT_OK) {
+//
+//                Bitmap image = BitmapFactory.decodeFile(fileUri.toString());
+//                Reader barReader =
+//
+//            } else {
+//                Toast.makeText(this, "Failed to saved image, try again", Toast.LENGTH_LONG).show();
+//            }
+//        }
+
+        if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
+                String contents = intent.getStringExtra("SCAN_RESULT");
+                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 
+                Log.d("XRAY", contents);
+                Log.d("XRAY", format);
 
-
-            } else {
-                Toast.makeText(this, "Failed to saved image, try again", Toast.LENGTH_LONG).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                // Handle cancel
             }
         }
 
