@@ -25,11 +25,16 @@ public class ResultActivity extends Activity {
         code = intent.getStringExtra("code");
         codeType = intent.getStringExtra("type");
 
-        Parse.initialize(this, "AsSpaxVT7WnJqQak0I5OJo4qh30qWDuko1DIITEG", "SjDfZt7x3mmmqbmlk4YGJVSuauV6TgJC4hoV04eo");
+        Parse.initialize(this, "f0zwTm7O0dYBWQ3liRpqABtiKE7wqKq1MGFw1bV1", "cIKlPXX1KSGhahJUILNC2X45Usl3SuEciFnvdLNR");
 
         ParseObject testObject = new ParseObject("a");
-        testObject.put("foo", "bar");
+        testObject.put("code", code);
+        testObject.put("type", codeType);
         testObject.saveInBackground();
+
+        this.finish();
+
+
 
     }
 }
