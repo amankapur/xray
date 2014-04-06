@@ -73,10 +73,13 @@ public class MainActivity extends Activity {
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 
-                Log.d("XRAY", contents);
-                Log.d("XRAY", format);
+                Log.d(TAG, contents);
+                Log.d(TAG, format);
 
-
+                Intent newIntent = new Intent(this, ResultActivity.class);
+                newIntent.putExtra("code", contents);
+                newIntent.putExtra("type", format);
+                startActivity(newIntent);
 
             } else if (resultCode == RESULT_CANCELED) {
                 // Handle cancel
