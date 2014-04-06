@@ -35,7 +35,6 @@ public class AllergyArrayAdapter extends ArrayAdapter<Allergy> {
         Allergy allergy = allergies.get(position);
 
         CheckBox selectedBoxView = (CheckBox) rowView.findViewById(R.id.selectedBox);
-        selectedBoxView.setTag(Integer.valueOf(position));
         selectedBoxView.setText(allergy.name);
         selectedBoxView.setTextSize(30);
 
