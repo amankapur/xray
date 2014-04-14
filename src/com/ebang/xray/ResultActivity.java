@@ -27,7 +27,7 @@ public class ResultActivity extends Activity {
 
         Parse.initialize(this, "f0zwTm7O0dYBWQ3liRpqABtiKE7wqKq1MGFw1bV1", "cIKlPXX1KSGhahJUILNC2X45Usl3SuEciFnvdLNR");
 
-        ParseObject testObject = new ParseObject("a");
+        ParseObject testObject = new ParseObject("roche");
         testObject.put("code", code);
         testObject.put("type", codeType);
         testObject.saveInBackground();
