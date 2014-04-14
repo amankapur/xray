@@ -2,9 +2,7 @@ package com.ebang.xray;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.JsonReader;
 import android.util.Log;
-import com.parse.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -15,16 +13,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Cory on 4/12/14.
@@ -36,25 +28,18 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
     public static final String APP_AUTH = "Nw97Z3l7b4Na2Bh5";
     public static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
     public static final String field_names = "description,brand,nutrition,ingredients,manufacturer";
-    public static final String API_BASE_URL =  "http://digit-eyes.com/gtin/v2_0/";
+    public static final String API_BASE_URL =  "http://allergy-xray.herokuapp.com/lookup/";
 
     @Override
     protected JSONObject doInBackground(String... upc) {
 
         String upcCode = upc[0];
-        String uri = Uri.parse(API_BASE_URL)
+        String uri = Uri.parse(API_BASE_URL + upcCode)
                 .buildUpon()
-                .appendQueryParameter("app_key", APP_KEY)
-                .appendQueryParameter("upc_code", upcCode)
-                .appendQueryParameter("language","en")
-                .appendQueryParameter("signature",getAuthToken(upcCode))
-                .appendQueryParameter("field_names", field_names)
                 .build().toString();
 
         try {
             JSONObject json = new JSONObject(urlRequestString(uri));
-            Log.d("API", json.toString());
-            Log.d("API", json.getString("description"));
             return json;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -66,6 +51,7 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
 
 
     protected void onPostExecute(JSONObject result) {
+        Log.d("API", result.toString());
     }
 
 
@@ -98,21 +84,4 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
         return builder.toString();
     }
 
-    public String getAuthToken(String upcCode){
-        SecretKeySpec signingKey = new SecretKeySpec(APP_AUTH.getBytes(), HMAC_SHA1_ALGORITHM);
-
-
-        Mac mac = null;
-        try {
-            mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
-            mac.init(signingKey);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        }
-
-        return Base64.encodeBase64String(mac.doFinal(upcCode.getBytes()));
-
-    }
 }

@@ -2,7 +2,6 @@ package com.ebang.xray;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -35,9 +34,7 @@ public class ResultActivity extends Activity {
 
         UPCLookupAsyncTask task = new UPCLookupAsyncTask();
 
-        task.execute(code).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-        this.finish();
+        task.execute(code);
 
 
 
