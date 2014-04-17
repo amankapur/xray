@@ -27,4 +27,13 @@ public class Allergy {
         return null;
     }
 
+
+    public static boolean anySelected(){
+        for (Allergy al : all){
+            if (al.selected){
+                return  true;
+            }
+        }
+        return  false;
+    }
 }

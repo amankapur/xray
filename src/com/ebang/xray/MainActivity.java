@@ -7,9 +7,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
-
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
@@ -41,20 +40,15 @@ public class MainActivity extends Activity {
         params.width = width;
         allergyListView.setLayoutParams(params);
 
-        Button pictureButton = (Button) findViewById(R.id.takePicture);
-        pictureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                intent.putExtra("SCAN_MODE", "ONE_D_MODE" );
-                startActivityForResult(intent, 0);
-            }
 
-        });
 
         allergyDrawer.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View view, float v) {
+                if (!Allergy.anySelected()){
+                    Toast.makeText(getBaseContext(), R.string.no_allergies, Toast.LENGTH_SHORT).show();
+                    allergyDrawer.openDrawer(Gravity.LEFT);
+                }
 
             }
 
@@ -67,7 +61,9 @@ public class MainActivity extends Activity {
             @Override
             public void onDrawerClosed(View view) {
                 setTitle("Scan Product Barcode");
-
+                if (Allergy.anySelected()){
+                    startScanActivity();
+                }
             }
 
             @Override
@@ -125,6 +121,12 @@ public class MainActivity extends Activity {
             new Allergy(n);
         }
 
+    }
+
+    private void startScanActivity(){
+        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+        intent.putExtra("SCAN_MODE", "ONE_D_MODE" );
+        startActivityForResult(intent, 0);
     }
 
 
