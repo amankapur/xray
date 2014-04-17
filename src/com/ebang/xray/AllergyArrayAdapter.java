@@ -1,3 +1,4 @@
+
 package com.ebang.xray;
 
 import android.content.Context;
@@ -5,8 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -18,11 +18,11 @@ public class AllergyArrayAdapter extends ArrayAdapter<Allergy> {
     private Context context;
     private ArrayList<Allergy> allergies;
 
-    public AllergyArrayAdapter(Context c, ArrayList<Allergy> allergies) {
-        super(c, R.layout.allergy_row, allergies);
+    public AllergyArrayAdapter(Context c) {
+        super(c, R.layout.allergy_drawer_row, Allergy.all);
 
         context = c;
-        this.allergies = allergies;
+        this.allergies = Allergy.all;
     }
 
     @Override
@@ -30,24 +30,27 @@ public class AllergyArrayAdapter extends ArrayAdapter<Allergy> {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View rowView = inflater.inflate(R.layout.allergy_row, null);
+        TextView rowView = (TextView) inflater.inflate(R.layout.allergy_drawer_row, null);
 
         Allergy allergy = allergies.get(position);
+        rowView.setText(allergy.name);
 
-        CheckBox selectedBoxView = (CheckBox) rowView.findViewById(R.id.selectedBox);
-        selectedBoxView.setText(allergy.name);
-        selectedBoxView.setTextSize(30);
+        rowView.setTextColor(rowView.getResources().getColor(R.color.Black));
 
-
-        selectedBoxView.setChecked(allergy.selected);
-
-        selectedBoxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        rowView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onClick(View v) {
+                TextView tv = (TextView) v;
+                Allergy al = Allergy.find(tv.getText().toString());
 
-                Allergy al = Allergy.find(buttonView.getText().toString());
-                if (al != null){
-                    al.selected = isChecked;
+
+                if (!al.selected){
+                    tv.setTextColor(tv.getResources().getColor(R.color.Blue));
+                    al.selected = true;
+                }
+                else {
+                    tv.setTextColor(tv.getResources().getColor(R.color.Black));
+                    al.selected = false;
                 }
             }
         });

@@ -24,10 +24,6 @@ import java.io.InputStreamReader;
 public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
 
 
-    public static final String APP_KEY = "/9dUE1VQuQI/";
-    public static final String APP_AUTH = "Nw97Z3l7b4Na2Bh5";
-    public static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
-    public static final String field_names = "description,brand,nutrition,ingredients,manufacturer";
     public static final String API_BASE_URL =  "http://allergy-xray.herokuapp.com/lookup/";
 
     @Override

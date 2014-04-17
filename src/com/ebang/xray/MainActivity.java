@@ -3,9 +3,10 @@ package com.ebang.xray;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -16,26 +17,31 @@ public class MainActivity extends Activity {
      * Called when the activity is first created.
      */
 
-    private ArrayAdapter<Allergy> allergyAdapter;
     private static String TAG = "XRAY";
-
+    private DrawerLayout allergyDrawer;
+    private ListView allergyListView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        ListView allergiesListView = (ListView) findViewById(R.id.allergiestListView);
+        allergyDrawer = (DrawerLayout) findViewById(R.id.allergy_drawer_layout);
+        allergyListView = (ListView) findViewById(R.id.allergiestListView);
 
-        allergyAdapter = new AllergyArrayAdapter(this, Allergy.all);
-        allergiesListView.setAdapter(allergyAdapter);
+        allergyDrawer.openDrawer(Gravity.LEFT);
+        setTitle("Pick Allergens");
 
         Log.d(TAG, "on create called");
         populateAllergies();
 
+        allergyListView.setAdapter(new AllergyArrayAdapter(this));
+
+        int width = getResources().getDisplayMetrics().widthPixels/2;
+        DrawerLayout.LayoutParams params = (android.support.v4.widget.DrawerLayout.LayoutParams) allergyListView.getLayoutParams();
+        params.width = width;
+        allergyListView.setLayoutParams(params);
 
         Button pictureButton = (Button) findViewById(R.id.takePicture);
-
-
         pictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,6 +50,30 @@ public class MainActivity extends Activity {
                 startActivityForResult(intent, 0);
             }
 
+        });
+
+        allergyDrawer.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View view, float v) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View view) {
+                setTitle("Pick Allergens");
+
+            }
+
+            @Override
+            public void onDrawerClosed(View view) {
+                setTitle("Scan Product Barcode");
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int i) {
+
+            }
         });
 
     }
@@ -90,11 +120,13 @@ public class MainActivity extends Activity {
 
 
     private void populateAllergies(){
-        String[] names = new String[] {"Milk", "Eggs", "Peanuts", "Tree Nuts", "Fish", "Shellfish", "Soy", "Wheat"};
+        String[] names = new String[] {"Milk", "Eggs", "Peanuts", "Tree Nuts", "Fish", "Shellfish", "Soy", "Wheat", "Nightshades"};
         for(String n: names){
             new Allergy(n);
         }
-        allergyAdapter.notifyDataSetChanged();
+
     }
+
+
 
 }
