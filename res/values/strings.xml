@@ -3,4 +3,6 @@
     <string name="app_name">xray</string>
     <string name="drawer_title">Pick Allergens</string>
     <string name="no_allergies">Pick at least one allergen</string>
+    <string name="action_scan"> Scan Barcode</string>
+    <string name="action_list"> View Current Scans</string>
 </resources>

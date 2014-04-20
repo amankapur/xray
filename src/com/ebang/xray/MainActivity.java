@@ -1,6 +1,5 @@
 package com.ebang.xray;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -8,17 +7,18 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
     /**
      * Called when the activity is first created.
      */
 
     private static String TAG = "XRAY";
     private DrawerLayout allergyDrawer;
-    private ListView allergyListView;
+    private ListView allergyListView, productListView;
+    public static ProductListArrayAdapter productViewAdapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,15 +40,14 @@ public class MainActivity extends Activity {
         params.width = width;
         allergyListView.setLayoutParams(params);
 
+        productViewAdapter = new ProductListArrayAdapter(this);
 
+        productListView = (ListView) findViewById(R.id.productsListView);
+        productListView.setAdapter(productViewAdapter);
 
         allergyDrawer.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View view, float v) {
-                if (!Allergy.anySelected()){
-                    Toast.makeText(getBaseContext(), R.string.no_allergies, Toast.LENGTH_SHORT).show();
-                    allergyDrawer.openDrawer(Gravity.LEFT);
-                }
 
             }
 
@@ -60,7 +59,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void onDrawerClosed(View view) {
-                setTitle("Scan Product Barcode");
+                setTitle("xray");
                 if (Allergy.anySelected()){
                     startScanActivity();
                 }
@@ -71,6 +70,8 @@ public class MainActivity extends Activity {
 
             }
         });
+
+
 
     }
 
@@ -96,16 +97,12 @@ public class MainActivity extends Activity {
 
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                String code = intent.getStringExtra("SCAN_RESULT");
 
-                Log.d(TAG, contents);
-                Log.d(TAG, format);
+                UPCLookupAsyncTask task = new UPCLookupAsyncTask();
 
-                Intent newIntent = new Intent(this, ResultActivity.class);
-                newIntent.putExtra("code", contents);
-                newIntent.putExtra("type", format);
-                startActivity(newIntent);
+                task.execute(code);
+
 
             } else if (resultCode == RESULT_CANCELED) {
                 // Handle cancel
@@ -123,11 +120,6 @@ public class MainActivity extends Activity {
 
     }
 
-    private void startScanActivity(){
-        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-        intent.putExtra("SCAN_MODE", "ONE_D_MODE" );
-        startActivityForResult(intent, 0);
-    }
 
 
 

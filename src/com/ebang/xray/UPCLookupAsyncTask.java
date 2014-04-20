@@ -3,6 +3,7 @@ package com.ebang.xray;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -26,6 +27,12 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
 
     public static final String API_BASE_URL =  "http://allergy-xray.herokuapp.com/lookup/";
 
+
+    public UPCLookupAsyncTask(){
+        super();
+
+    }
+
     @Override
     protected JSONObject doInBackground(String... upc) {
 
@@ -48,9 +55,30 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
 
     protected void onPostExecute(JSONObject result) {
         Log.d("API", result.toString());
+
+        ProductItem p = createProductItem(result);
+
+        if (p == null){
+            Toast.makeText(BaseActivity.context, "Error to create product", Toast.LENGTH_LONG).show();
+        }
+        else {
+            p.showResultView();
+        }
+
+
     }
 
-
+    private ProductItem createProductItem(JSONObject result) {
+        try {
+            JSONObject product = result.getJSONObject("product");
+            String desc = product.getString("description");
+            String upcCode = product.getString("upc_code");
+            return new ProductItem(desc, null, upcCode);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
     public String urlRequestString(String url) {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/showScanner"
+          android:icon="@drawable/ic_scanner"
+          android:title="@string/action_scan"
+          android:showAsAction="always" />
+    <!--&lt;!&ndash; Settings, should always be in the overflow &ndash;&gt;-->
+    <!--<item android:id="@+id/showListItem"-->
+          <!--android:title="@string/action_list"-->
+          <!--android:icon="@drawable/ic_list"-->
+          <!--android:showAsAction="always"  />-->
+</menu>

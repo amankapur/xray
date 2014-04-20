@@ -1,33 +1,27 @@
 package com.ebang.xray;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
+import java.util.ArrayList;
 
 /**
  * Created by amankapur91 on 4/6/14.
  */
-public class ResultActivity extends Activity {
+public class ResultActivity extends BaseActivity {
 
-    private String code;
-    private String codeType;
-
-    private String TAG = "RESULT";
+    private ProductItem productItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.result);
 
-        Intent intent = getIntent();
-        code = intent.getStringExtra("code");
-        codeType = intent.getStringExtra("type");
-
-        UPCLookupAsyncTask task = new UPCLookupAsyncTask();
-
-        task.execute(code);
-
-
+        Intent i = getIntent();
+        ArrayList ar = i.getStringArrayListExtra("productItem");
+        if (ar != null){
+            productItem = (ProductItem) ar.get(0);
+        }
 
     }
 }
