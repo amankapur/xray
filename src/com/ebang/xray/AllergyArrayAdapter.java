@@ -35,7 +35,12 @@ public class AllergyArrayAdapter extends ArrayAdapter<Allergy> {
         Allergy allergy = allergies.get(position);
         rowView.setText(allergy.name);
 
-        rowView.setTextColor(rowView.getResources().getColor(R.color.Black));
+        if (!allergy.selected){
+            rowView.setTextColor(rowView.getResources().getColor(R.color.Black));
+        }
+        else {
+            rowView.setTextColor(rowView.getResources().getColor(R.color.holo_blue_dark));
+        }
 
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
