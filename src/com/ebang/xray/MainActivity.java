@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity {
 
                 ProductItem p = ProductItem.find("upc", code);
                 if (p == null){
-                    UPCLookupAsyncTask task = new UPCLookupAsyncTask();
+                    UPCLookupAsyncTask task = new UPCLookupAsyncTask(progress);
                     task.execute(code);
                 }
                 else {

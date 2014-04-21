@@ -1,5 +1,6 @@
 package com.ebang.xray;
 
+import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -27,9 +28,11 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
 
     public static final String API_BASE_URL =  "http://allergy-xray.herokuapp.com/lookup/";
     private String upcCode;
+    private ProgressDialog progress;
 
-    public UPCLookupAsyncTask(){
+    public UPCLookupAsyncTask(ProgressDialog progress){
         super();
+        this.progress = progress;
 
     }
 
@@ -54,7 +57,7 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
     @Override
     protected void onPreExecute(){
 
-//        BaseActivity.progress.show();
+        progress.show();
 
     }
 
@@ -69,7 +72,7 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
         }
         else {
             p.showResultView();
-            BaseActivity.progress.dismiss();
+            progress.dismiss();
         }
 
 

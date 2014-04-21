@@ -15,7 +15,7 @@ import android.view.MenuItem;
 public class BaseActivity extends Activity {
 
     public static Context context;
-    public static ProgressDialog progress;
+    public ProgressDialog progress;
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
