@@ -134,7 +134,7 @@ public class MainActivity extends BaseActivity {
 
 
     private void populateAllergies(){
-        String[] names = new String[] {"Milk", "Eggs", "Peanuts", "Tree Nuts", "Fish", "Shellfish", "Soy", "Wheat", "Nightshades"};
+        String[] names = new String[] {"Dairy", "Eggs", "Tree Nuts", "Fish", "Soy", "Wheat", "Gluten", "Corn", "MSG", "Nightshades"};
         for(String n: names){
             new Allergy(n);
         }

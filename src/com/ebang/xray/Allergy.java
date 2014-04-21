@@ -36,4 +36,14 @@ public class Allergy {
         }
         return  false;
     }
+
+    public static ArrayList<Allergy> selected(){
+        ArrayList<Allergy> t = new ArrayList<Allergy>();
+        for (Allergy al: all){
+            if (al.selected){
+                t.add(al);
+            }
+        }
+        return t;
+    }
 }

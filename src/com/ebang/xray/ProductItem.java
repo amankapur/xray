@@ -1,16 +1,16 @@
 package com.ebang.xray;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by amankapur91 on 4/17/14.
  */
-public class ProductItem implements Serializable{
+public class ProductItem {
     public String name;
     public String imgUrl;
     public Bitmap imgBitmap;
@@ -24,20 +24,20 @@ public class ProductItem implements Serializable{
     public ProductItem(String name, String imgUrl, String upcCode){
         this.name = name;
         this.imgUrl = imgUrl;
-        if (imgUrl != null){
-            Log.d("XRAY", imgUrl);
-            (new DownloadImageAsyncTask(this)).execute();
-        }
         all.add(this);
         MainActivity.productViewAdapter.notifyDataSetChanged();
     }
 
+    public void downloadImage(ProgressDialog progress){
+        if (imgUrl != null || !imgUrl.equals("null")){
+            Log.d("XRAY", imgUrl);
+            (new DownloadImageAsyncTask(this, progress)).execute();
+        }
+    }
     public void showResultView(){
-        ArrayList<ProductItem> tList = new ArrayList<ProductItem>();
-        tList.add(this);
 
         Intent newIntent = new Intent(BaseActivity.context, ResultActivity.class);
-        newIntent.putExtra("productItem", tList);
+        newIntent.putExtra("productItem", upcCode);
         newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         BaseActivity.context.startActivity(newIntent);
     }
@@ -57,6 +57,16 @@ public class ProductItem implements Serializable{
             }
         }
         return null;
+    }
+
+    public boolean hasAllergies(){
+        for (Allergy al: allergies){
+            ArrayList<Allergy> selectedAllergies = Allergy.selected();
+            if (selectedAllergies.contains(al)){
+                return true;
+            }
+        }
+        return false;
     }
 
 

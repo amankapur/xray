@@ -5,6 +5,7 @@ package com.ebang.xray;
  */
 
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 import org.apache.http.HttpEntity;
@@ -25,11 +26,14 @@ import java.io.InputStream;
 public class DownloadImageAsyncTask extends AsyncTask<String, Void, byte[]> {
 
 
-    ProductItem productItem;
+    private ProductItem productItem;
+    private ProgressDialog progress;
 
-    public DownloadImageAsyncTask(ProductItem productItem) {
+
+    public DownloadImageAsyncTask(ProductItem productItem, ProgressDialog progress) {
 
         this.productItem = productItem;
+        this.progress = progress;
 
     }
 
@@ -38,7 +42,7 @@ public class DownloadImageAsyncTask extends AsyncTask<String, Void, byte[]> {
         DefaultHttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(productItem.imgUrl);
         byte[] imageBlob = new byte[0];
-        Log.d("XRAY", "trying to downloading image");
+        Log.d("XRAY", "trying to downloading image : " + productItem.imgUrl);
         try{
             HttpResponse response = client.execute(request);
             HttpEntity entity = response.getEntity();
@@ -67,6 +71,8 @@ public class DownloadImageAsyncTask extends AsyncTask<String, Void, byte[]> {
     protected void onPostExecute(byte[] image) {
 
         MainActivity.productViewAdapter.notifyDataSetChanged();
+        productItem.showResultView();
+        progress.dismiss();
 
     }
 }

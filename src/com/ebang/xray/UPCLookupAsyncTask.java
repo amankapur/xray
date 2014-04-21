@@ -12,6 +12,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 /**
  * Created by Cory on 4/12/14.
@@ -62,17 +64,19 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
     }
 
     protected void onPostExecute(JSONObject result) {
-        Log.d("API", result.toString());
+
+        if (result == null){
+            Toast.makeText(BaseActivity.context, "Error to create product", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         ProductItem p = createProductItem(result);
+        p.downloadImage(progress);
         p.upcCode = upcCode;
+        Log.d("XRAY", upcCode);
 
         if (p == null){
             Toast.makeText(BaseActivity.context, "Error to create product", Toast.LENGTH_LONG).show();
-        }
-        else {
-            p.showResultView();
-            progress.dismiss();
         }
 
 
@@ -84,8 +88,14 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
             String desc = product.getString("description");
             String upcCode = product.getString("upc_code");
             String imgUrl = product.getString("image");
-            return new ProductItem(desc, imgUrl, upcCode);
+            ProductItem p = new ProductItem(desc, imgUrl, upcCode);
+
+            Log.d("XRAY", "allergies from API : " + result.getJSONArray("allergens").toString());
+            p.allergies = getAllergies(result.getJSONArray("allergens"));
+            Log.d("XRAY", "ALLERGY COUNT IS : " + p.allergies.size());
+            return p;
         } catch (JSONException e) {
+            Log.d("XRAY", "FAILED TO CREATE PRODUCT");
             e.printStackTrace();
         }
         return null;
@@ -117,6 +127,17 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
             e.printStackTrace();
         }
         return builder.toString();
+    }
+
+    private ArrayList<Allergy> getAllergies(JSONArray jArray) throws JSONException {
+        ArrayList<Allergy> listdata = new ArrayList<Allergy>();
+        if (jArray != null) {
+            for (int i=0;i<jArray.length();i++){
+                listdata.add(Allergy.find(jArray.get(i).toString()));
+            }
+        }
+        return listdata;
+
     }
 
 }

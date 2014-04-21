@@ -6,8 +6,28 @@
               android:layout_height="match_parent"
               android:background="@color/White">
 
-    <TextView android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-            />
+    <ImageView android:layout_width="300dp"
+               android:layout_height="300dp"
+               android:layout_marginTop="30dp"
+               android:layout_centerHorizontal="true"
+               android:alpha="0.7"
+               android:id="@+id/resultImage"/>
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerHorizontal="true"
+              android:textSize="30dp"
+              android:layout_marginTop="20dp"
+              android:textColor="@color/holo_blue_dark"
+              android:id="@+id/resultName"
+              android:layout_below="@id/resultImage"/>
+
+    <ImageView android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_below="@id/resultName"
+               android:layout_centerHorizontal="true"
+               android:layout_marginTop="20dp"
+               android:alpha="0.7"
+               android:id="@+id/resultIcon"/>
 
 </RelativeLayout>
