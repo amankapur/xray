@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 public class MainActivity extends BaseActivity {
@@ -48,6 +49,10 @@ public class MainActivity extends BaseActivity {
         allergyDrawer.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View view, float v) {
+                if (!Allergy.anySelected()){
+                    Toast.makeText(context, "Please select at least one allergen", Toast.LENGTH_SHORT);
+                    allergyDrawer.openDrawer(Gravity.LEFT);
+                }
 
             }
 
@@ -60,7 +65,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onDrawerClosed(View view) {
                 setTitle("xray");
-                if (Allergy.anySelected()){
+                if (Allergy.anySelected() && ProductItem.all.isEmpty()){
                     startScanActivity();
                 }
             }
