@@ -44,7 +44,7 @@ public class ProductListArrayAdapter extends ArrayAdapter<ProductItem> {
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView) v.findViewById(R.id.productDescView);
-                ProductItem p = ProductItem.find(tv.getText().toString());
+                ProductItem p = ProductItem.find("name", tv.getText().toString());
                 p.showResultView();
             }
         });

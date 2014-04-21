@@ -40,10 +40,18 @@ public class ProductItem implements Serializable{
         BaseActivity.context.startActivity(newIntent);
     }
 
-    public static ProductItem find(String name){
+    public static ProductItem find(String type, String value){
         for(ProductItem p: all){
-            if (p.name.equals(name)){
-                return p;
+            if (type.equals("name")){
+                if (p.name.equals(value)){
+                    return p;
+                }
+            }
+
+            if (type.equals("upc")){
+                if (p.upcCode.equals(value)){
+                    return p;
+                }
             }
         }
         return null;

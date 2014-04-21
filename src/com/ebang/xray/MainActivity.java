@@ -97,10 +97,15 @@ public class MainActivity extends BaseActivity {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
                 String code = intent.getStringExtra("SCAN_RESULT");
-                progress.show();
-                UPCLookupAsyncTask task = new UPCLookupAsyncTask();
 
-                task.execute(code);
+                ProductItem p = ProductItem.find("upc", code);
+                if (p == null){
+                    UPCLookupAsyncTask task = new UPCLookupAsyncTask();
+                    task.execute(code);
+                }
+                else {
+                    p.showResultView();
+                }
 
 
             } else if (resultCode == RESULT_CANCELED) {

@@ -26,7 +26,7 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
 
 
     public static final String API_BASE_URL =  "http://allergy-xray.herokuapp.com/lookup/";
-
+    private String upcCode;
 
     public UPCLookupAsyncTask(){
         super();
@@ -36,7 +36,7 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
     @Override
     protected JSONObject doInBackground(String... upc) {
 
-        String upcCode = upc[0];
+        upcCode = upc[0];
         String uri = Uri.parse(API_BASE_URL + upcCode)
                 .buildUpon()
                 .build().toString();
@@ -51,12 +51,18 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
         return null;
     }
 
+    @Override
+    protected void onPreExecute(){
 
+//        BaseActivity.progress.show();
+
+    }
 
     protected void onPostExecute(JSONObject result) {
         Log.d("API", result.toString());
 
         ProductItem p = createProductItem(result);
+        p.upcCode = upcCode;
 
         if (p == null){
             Toast.makeText(BaseActivity.context, "Error to create product", Toast.LENGTH_LONG).show();
