@@ -2,6 +2,7 @@ package com.ebang.xray;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +35,11 @@ public class ProductListArrayAdapter extends ArrayAdapter<ProductItem> {
 
         ImageView imageView = (ImageView) rowView.findViewById(R.id.productImageView);
         TextView descView = (TextView) rowView.findViewById(R.id.productDescView);
+        Log.d("XRAY", "getting image view in getview");
         if (p.imgBitmap == null && p.imgBytes != null){
             p.imgBitmap = BitmapFactory.decodeByteArray(p.imgBytes, 0, p.imgBytes.length);
             imageView.setImageBitmap(p.imgBitmap);
+            Log.d("XRAY", "setting image view in getview");
         }
         descView.setText(p.name);
 

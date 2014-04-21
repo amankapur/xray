@@ -2,6 +2,7 @@ package com.ebang.xray;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class ProductItem implements Serializable{
         this.name = name;
         this.imgUrl = imgUrl;
         if (imgUrl != null){
+            Log.d("XRAY", imgUrl);
             (new DownloadImageAsyncTask(this)).execute();
         }
         all.add(this);

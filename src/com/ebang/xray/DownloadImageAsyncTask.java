@@ -6,6 +6,7 @@ package com.ebang.xray;
 
 
 import android.os.AsyncTask;
+import android.util.Log;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -37,6 +38,7 @@ public class DownloadImageAsyncTask extends AsyncTask<String, Void, byte[]> {
         DefaultHttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(productItem.imgUrl);
         byte[] imageBlob = new byte[0];
+        Log.d("XRAY", "trying to downloading image");
         try{
             HttpResponse response = client.execute(request);
             HttpEntity entity = response.getEntity();
@@ -57,12 +59,14 @@ public class DownloadImageAsyncTask extends AsyncTask<String, Void, byte[]> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        productItem.imgBytes = imageBlob;
         return imageBlob;
 
     }
 
     protected void onPostExecute(byte[] image) {
-        productItem.imgBytes = image;
+
+        MainActivity.productViewAdapter.notifyDataSetChanged();
+
     }
 }

@@ -83,7 +83,8 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
             JSONObject product = result.getJSONObject("product");
             String desc = product.getString("description");
             String upcCode = product.getString("upc_code");
-            return new ProductItem(desc, null, upcCode);
+            String imgUrl = product.getString("image");
+            return new ProductItem(desc, imgUrl, upcCode);
         } catch (JSONException e) {
             e.printStackTrace();
         }

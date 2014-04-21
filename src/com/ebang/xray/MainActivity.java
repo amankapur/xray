@@ -2,9 +2,12 @@ package com.ebang.xray;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -20,6 +23,8 @@ public class MainActivity extends BaseActivity {
     private ListView allergyListView, productListView;
     public static ProductListArrayAdapter productViewAdapter;
 
+    private GestureDetectorCompat detector;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +36,7 @@ public class MainActivity extends BaseActivity {
         allergyDrawer.openDrawer(Gravity.LEFT);
         setTitle("Pick Allergens");
 
+        detector = new GestureDetectorCompat(this, new AllergyDrawerGestureListener());
         Log.d(TAG, "on create called");
         populateAllergies();
 
@@ -46,6 +52,12 @@ public class MainActivity extends BaseActivity {
         productListView = (ListView) findViewById(R.id.productsListView);
         productListView.setAdapter(productViewAdapter);
 
+        productListView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return detector.onTouchEvent(event);
+            }
+        });
         allergyDrawer.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View view, float v) {
@@ -129,7 +141,21 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    private class AllergyDrawerGestureListener extends GestureDetector.SimpleOnGestureListener {
 
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2,float velocityX, float velocityY) {
+            try{
+                if(e1.getX() - e2.getX() < 300 && Math.abs(velocityX) > 600) {
+                    allergyDrawer.openDrawer(Gravity.LEFT);
+                }
+                return true;
+            }
+            catch (NullPointerException e){
+                return  false;
+            }
+        }
+    }
 
 
 }
