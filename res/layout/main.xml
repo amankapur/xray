@@ -21,8 +21,8 @@
             <ListView android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
                       android:id="@+id/productsListView"
-                      android:dividerHeight="5dp"
-                      android:divider="@android:color/transparent"/>
+                      android:dividerHeight="2dp"
+                      android:divider="@android:color/holo_blue_dark"/>
 
 
 

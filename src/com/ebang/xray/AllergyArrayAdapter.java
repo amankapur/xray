@@ -45,7 +45,7 @@ public class AllergyArrayAdapter extends ArrayAdapter<Allergy> {
 
 
                 if (!al.selected){
-                    tv.setTextColor(tv.getResources().getColor(R.color.Blue));
+                    tv.setTextColor(tv.getResources().getColor(R.color.holo_blue_dark));
                     al.selected = true;
                 }
                 else {
