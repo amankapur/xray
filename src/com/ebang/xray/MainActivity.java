@@ -94,11 +94,10 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
-
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
                 String code = intent.getStringExtra("SCAN_RESULT");
-
+                progress.show();
                 UPCLookupAsyncTask task = new UPCLookupAsyncTask();
 
                 task.execute(code);

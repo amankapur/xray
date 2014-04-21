@@ -63,6 +63,7 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
         }
         else {
             p.showResultView();
+            BaseActivity.progress.dismiss();
         }
 
 

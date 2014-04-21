@@ -1,6 +1,7 @@
 package com.ebang.xray;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,10 +15,15 @@ import android.view.MenuItem;
 public class BaseActivity extends Activity {
 
     public static Context context;
+    public static ProgressDialog progress;
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         context = getApplicationContext();
+
+        progress = new ProgressDialog(this);
+        progress.setTitle("Loading");
+        progress.setMessage("Analyzing your product...");
     }
 
     @Override
