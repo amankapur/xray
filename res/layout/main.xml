@@ -32,11 +32,9 @@
         <ListView
                 android:layout_height="match_parent"
                 android:layout_width="50dp"
-                android:choiceMode="singleChoice"
                 android:divider="@android:color/transparent"
                 android:background="@color/GhostWhite"
                 android:layout_gravity="start"
-                android:dividerHeight="1dp"
                 android:id="@+id/allergiestListView"/>
     </android.support.v4.widget.DrawerLayout>
 
