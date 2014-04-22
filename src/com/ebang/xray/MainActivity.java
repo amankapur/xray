@@ -1,7 +1,11 @@
 package com.ebang.xray;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -22,6 +26,7 @@ public class MainActivity extends BaseActivity {
     private DrawerLayout allergyDrawer;
     private ListView allergyListView, productListView;
     public static ProductListArrayAdapter productViewAdapter;
+    public static String KEY_EULA_ACCEPTED = "yo mama";
 
     private GestureDetectorCompat detector;
 
@@ -29,6 +34,13 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        if(!prefs.getBoolean(KEY_EULA_ACCEPTED, false)) {
+            showEula();
+            // Determine if EULA was accepted this time
+//            prefs.edit().putBoolean(KEY_EULA_ACCEPTED, true).commit();
+        }
 
         allergyDrawer = (DrawerLayout) findViewById(R.id.allergy_drawer_layout);
         allergyListView = (ListView) findViewById(R.id.allergiestListView);
@@ -90,6 +102,28 @@ public class MainActivity extends BaseActivity {
 
 
 
+    }
+
+    private void showEula() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("DISCLAIMER");
+        alert.setMessage("While we work to ensure that product information is correct, on occasion manufacturers may alter their ingredient lists. Actual product packaging and materials may contain more and/or different information than that shown on our Web site. We recommend that you do not solely rely on the information presented and that you always read labels, warnings, and directions before using or consuming a product.");
+        alert.setView(productListView);
+        alert.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                System.exit(0);
+            }
+        });
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int id)
+            {
+
+            }
+      });
+
+        alert.show();
     }
 
     @Override
