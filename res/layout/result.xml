@@ -10,7 +10,6 @@
                android:layout_height="200dp"
                android:layout_marginTop="30dp"
                android:layout_centerHorizontal="true"
-               android:alpha="0.7"
                android:id="@+id/resultImage"/>
 
     <TextView android:layout_width="wrap_content"
