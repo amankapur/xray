@@ -39,7 +39,7 @@ public class MainActivity extends BaseActivity {
         if(!prefs.getBoolean(KEY_EULA_ACCEPTED, false)) {
             showEula();
             // Determine if EULA was accepted this time
-//            prefs.edit().putBoolean(KEY_EULA_ACCEPTED, true).commit();
+            prefs.edit().putBoolean(KEY_EULA_ACCEPTED, true).commit();
         }
 
         allergyDrawer = (DrawerLayout) findViewById(R.id.allergy_drawer_layout);
