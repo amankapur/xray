@@ -6,15 +6,20 @@ package com.ebang.xray;
 
 
 import android.app.ProgressDialog;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,18 +33,46 @@ public class DownloadImageAsyncTask extends AsyncTask<String, Void, byte[]> {
 
     private ProductItem productItem;
     private ProgressDialog progress;
+    private DefaultHttpClient client;
 
 
     public DownloadImageAsyncTask(ProductItem productItem, ProgressDialog progress) {
 
         this.productItem = productItem;
         this.progress = progress;
+        client = new DefaultHttpClient();
 
     }
 
 
     protected byte[] doInBackground(String... urls) {
-        DefaultHttpClient client = new DefaultHttpClient();
+
+
+
+        if (productItem.imgUrl == "null"){
+
+            try {
+                String uri = Uri.parse("http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + URLEncoder.encode(productItem.name, "UTF-8"))
+                        .buildUpon()
+                        .build().toString();
+                JSONObject json = new JSONObject(UPCLookupAsyncTask.urlRequestString(uri));
+                JSONObject t = (JSONObject) json.getJSONObject("responseData").getJSONArray("results").get(0);
+                productItem.imgUrl = t.getString("url");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+
+        doDownload(productItem.imgUrl);
+
+        return productItem.imgBytes;
+
+
+    }
+
+    private void doDownload(String imgUrl) {
         HttpGet request = new HttpGet(productItem.imgUrl);
         byte[] imageBlob = new byte[0];
         Log.d("XRAY", "trying to downloading image : " + productItem.imgUrl);
@@ -60,12 +93,11 @@ public class DownloadImageAsyncTask extends AsyncTask<String, Void, byte[]> {
             buffer.flush();
 
             imageBlob = buffer.toByteArray();
+            productItem.imgBytes = imageBlob;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        productItem.imgBytes = imageBlob;
-        return imageBlob;
-
     }
 
     protected void onPostExecute(byte[] image) {

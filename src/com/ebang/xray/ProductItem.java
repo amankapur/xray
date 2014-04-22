@@ -29,10 +29,10 @@ public class ProductItem {
     }
 
     public void downloadImage(ProgressDialog progress){
-        if (imgUrl != null || !imgUrl.equals("null")){
-            Log.d("XRAY", imgUrl);
-            (new DownloadImageAsyncTask(this, progress)).execute();
-        }
+
+        Log.d("XRAY", imgUrl);
+        (new DownloadImageAsyncTask(this, progress)).execute();
+
     }
     public void showResultView(){
 
@@ -68,6 +68,7 @@ public class ProductItem {
         }
         return false;
     }
+
 
 
 }

@@ -71,7 +71,10 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
         }
 
         ProductItem p = createProductItem(result);
+
         p.downloadImage(progress);
+
+
         p.upcCode = upcCode;
         Log.d("XRAY", upcCode);
 
@@ -102,7 +105,7 @@ public class UPCLookupAsyncTask extends AsyncTask<String,Void, JSONObject> {
     }
 
 
-    public String urlRequestString(String url) {
+    public static String urlRequestString(String url) {
         StringBuilder builder = new StringBuilder();
         HttpClient client = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(url);
